@@ -35,9 +35,9 @@ const RecentOrders = () => {
     enqueueSnackbar("Something went wrong!", { variant: "error" });
   }
 
-  setTimeout(() => {
-        console.log(resData.data.data);
-  }, 3000)
+  // setTimeout(() => {
+  //       console.log(resData.data.data);
+  // }, 3000)
 
   return (
     <div className="container mx-auto bg-[#262626] p-4 rounded-lg">

@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const getBgColor = () => { 
+export const getBgColor = () => {
   const bgarr = [
     "color1",
     "color2",
@@ -18,13 +18,21 @@ export const getBgColor = () => {
   return color;
 };
 
-
 export const getAvatarName = (name) => {
-  if(!name) return "";
+  if (!name) return "";
 
-  return name.split(" ").map(word => word[0]).join("").toUpperCase();
-}
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+};
 
 export const fetchDateTime = (newDate) => {
-  return moment(newDate).format('lll');  // December 2, 2025 3:45 PM
-}
+  return moment(newDate).format("lll"); // December 2, 2025 3:45 PM
+};
+
+export const playSound = (soundFile) => {
+  const audio = new Audio(`/sounds/${soundFile}`);
+  audio.play();
+};

@@ -1,2 +1,6 @@
-[-] convert the backend type from CommonJS to ES Modules 
+[Todos] convert the backend type from CommonJS to ES Modules 
     like this => require("mongoose") to import mongoose from "mongoose";
+ 
+[Todos] use TanStack Router if Better than React Router
+
+[Todos] use charts 📈 in dashboard 
