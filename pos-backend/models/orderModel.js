@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema({
     customerDetails: {
         name: { type: String, required: true },
-        phone: { type: String, requried: true},
+        phone: { type: String, required: true},
         guests: { type: Number, required: true },
     },
     orderStatus: {
@@ -24,8 +24,8 @@ const orderSchema = new mongoose.Schema({
     table: { type: mongoose.Schema.Types.ObjectId, ref: "Table" },
     paymentMethod: String,
     paymentData: {
-        razorpay_order_id: String,
-        razorpay_payment_id: String
+        stripe_payment_intent_id: String,
+        stripe_payment_id: String
     }
 }, { timestamps : true } );
 

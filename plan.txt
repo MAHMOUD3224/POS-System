@@ -7,3 +7,38 @@
 
 [⚠️] cyprto library not need to install cuz it's a default in Node.js 
 if you need it install it later
+[⚠️⚠️‼️] we must hide .env from GitHub
+[⚠️⚠️‼️] we must change MongoDB Password to be secure
+
+our system flow
+1. user select items from menu
+2. user add items to cart
+3. user go to bill
+4. user select payment method
+5. user place order
+6. user pay
+----------------------====== the draw flow ======----------------------
+     FRONTEND                    BACKEND                    STRIPE
+     ────────                    ───────                    ──────
+         │                          │                          │
+         │  1. POST /create-order   │                          │
+         │  { amount: 105.25 }      │                          │
+         │─────────────────────────▶│                          │
+         │                          │  2. paymentIntents.create()
+         │                          │  (uses SECRET KEY)       │
+         │                          │─────────────────────────▶│
+         │                          │                          │
+         │                          │◀─────────────────────────│
+         │                          │  { id, client_secret }   │
+         │◀─────────────────────────│                          │
+         │  { clientSecret }        │                          │
+         │                          │                          │
+         │  3. confirmCardPayment() │                          │
+         │  (uses PUBLISHABLE KEY)  │                          │
+         │  (uses clientSecret)     │                          │
+         │  (uses tok_visa)         │                          │
+         │─────────────────────────────────────────────────────▶│
+         │                                                      │
+         │◀─────────────────────────────────────────────────────│
+         │  { paymentIntent: { status: "succeeded" } }          │
+         │                          │                          │

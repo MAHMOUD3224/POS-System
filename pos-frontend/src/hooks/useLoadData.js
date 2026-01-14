@@ -11,16 +11,17 @@ const useLoadData = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try { 
+      try {
         const { data } = await getUserData();
         console.log(data);
         const { _id, name, email, phone, role } = data.data;
         dispatch(setUser({ _id, name, email, phone, role }));
       } catch (error) {
+        // todos: why we remove user and the init value is for all values are empty
         dispatch(removeUser());
-        Navigate("/auth");
+        navigate("/auth");
         console.log(error);
-      }finally{
+      } finally {
         setIsLoading(false);
       }
     };

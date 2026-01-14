@@ -6,9 +6,8 @@ import {
 import { getTotalPrice } from "../../redux/slices/cartSlice";
 import {
   // addOrder,
-  createOrderRazorpay,
+  createPaymentIntent,
   // updateTable,
-  // verifyPaymentRazorpay,
 } from "../../https/index";
 import { enqueueSnackbar } from "notistack";
 // import { useMutation } from "@tanstack/react-query";
@@ -17,10 +16,10 @@ import { enqueueSnackbar } from "notistack";
 import { messageEnqueue } from "../../utils";
 // import Invoice from "../invoice/Invoice";
 
-function loadScript(src) {
+function loadStripeScript() {
   return new Promise((resolve) => {
     const script = document.createElement("script");
-    script.src = src;
+    script.src = "https://js.stripe.com/v3/";
     script.onload = () => {
       resolve(true);
     };
@@ -51,91 +50,88 @@ const Bill = () => {
       enqueueSnackbar("Please select a payment method!", {
         variant: "warning",
       });
-
       return;
     }
 
     if (paymentMethod === "Online") {
-      // load the script
+      // Load Stripe.js SDK
       try {
-        const res = await loadScript(
-          "https://checkout.razorpay.com/v1/checkout.js" // todos: change the link if you change razorpay any GetWay
-        );
+        const res = await loadStripeScript();
 
         if (!res) {
-          enqueueSnackbar("Razorpay SDK failed to load. Are you online?", {
+          enqueueSnackbar("Stripe SDK failed to load. Are you online?", {
             variant: "warning",
           });
           return;
         }
 
-        // create order
+        // Initialize Stripe with your publishable key
+        const stripe = window.Stripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+        // Create PaymentIntent on backend
         const reqData = {
           amount: totalPriceWithTax.toFixed(2),
         };
 
-        const { data } = await createOrderRazorpay(reqData);
-        console.log(data)
-        const options = {
-          key: `${import.meta.env.VITE_RAZORPAY_KEY_ID}`,
-          amount: data.order.amount,
-          currency: data.order.currency,
-          name: "RESTRO",
-          description: "Secure Payment for Your Meal",
-          order_id: data.order.id,
-          handler: async function (response) {
-            console.log(response)
-            // const verification = await verifyPaymentRazorpay(response);
-            // console.log(verification);
-            // messageEnqueue({message:verification.data.message},'success')
-            // enqueueSnackbar(verification.data.message, { variant: "success" });
+        const { data } = await createPaymentIntent(reqData);
+        console.log("PaymentIntent created:", data);
 
-            // Place the order
-            // const orderData = {
-            //   customerDetails: {
-            //     name: customerData.customerName,
-            //     phone: customerData.customerPhone,
-            //     guests: customerData.guests,
-            //   },
-            //   orderStatus: "In Progress",
-            //   bills: {
-            //     total: total,
-            //     tax: tax,
-            //     totalWithTax: totalPriceWithTax,
-            //   },
-            //   items: cartData,
-            //   table: customerData.table.tableId,
-            //   paymentMethod: paymentMethod,
-            //   paymentData: {
-            //     razorpay_order_id: response.razorpay_order_id,
-            //     razorpay_payment_id: response.razorpay_payment_id,
-            //   },
-            // };
+        // Confirm the payment using test token (tok_visa)
+        // Note: In production, use Stripe Elements UI for real card input
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+          data.clientSecret,
+          {
+            payment_method: {
+              card: {
+                token: "tok_visa", // Test token - works in Test Mode only
+              },
+              billing_details: {
+                name: customerData.customerName,
+                phone: customerData.customerPhone,
+              },
+            },
+          }
+        );
 
-            // setTimeout(() => {
-            //   orderMutation.mutate(orderData);
-            // }, 1500);
-          },
-          prefill: {
-            name: customerData.name,
-            email: "",
-            contact: customerData.phone,
-          },
-          theme: { color: "#025cca" },
-        };
+        if (error) {
+          console.error("Stripe error:", error);
+          messageEnqueue({ message: "Payment Failed!" }, "error");
+        } else if (paymentIntent.status === "succeeded") {
+          console.log("Payment succeeded:", paymentIntent);
+          messageEnqueue({ message: "Payment Successful!" }, "success");
 
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+          // Place the order after successful payment
+          // const orderData = {
+          //   customerDetails: {
+          //     name: customerData.customerName,
+          //     phone: customerData.customerPhone,
+          //     guests: customerData.guests,
+          //   },
+          //   orderStatus: "In Progress",
+          //   bills: {
+          //     total: total,
+          //     tax: tax,
+          //     totalWithTax: totalPriceWithTax,
+          //   },
+          //   items: cartData,
+          //   table: customerData.table.tableId,
+          //   paymentMethod: paymentMethod,
+          //   paymentData: {
+          //     stripe_payment_intent_id: paymentIntent.id,
+          //     stripe_payment_id: paymentIntent.id,
+          //   },
+          // };
+
+          // setTimeout(() => {
+          //   orderMutation.mutate(orderData);
+          // }, 1500);
+        }
       } catch (error) {
         console.log(error);
-        messageEnqueue({ message: "Payment Failed!" }, "error")
-        // enqueueSnackbar("Payment Failed!", {
-        //   variant: "error",
-        // });
+        messageEnqueue({ message: "Payment Failed!" }, "error");
       }
     } else {
-      // Place the order
+      // Place the order for Cash payment
       // const orderData = {
       //   customerDetails: {
       //     name: customerData.customerName,
@@ -201,7 +197,7 @@ const Bill = () => {
     <>
       <div className="flex items-center justify-between px-5 mt-2">
         <p className="text-xs text-[#ababab] font-medium mt-2">
-          Items({cartData.lenght})
+          Items({cartData.length})
         </p>
         <h1 className="text-[#f5f5f5] text-md font-bold">
           ${total.toFixed(2)}

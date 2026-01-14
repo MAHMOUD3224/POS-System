@@ -1,24 +1,34 @@
-const Razorpay = require("razorpay");
+const Stripe = require("stripe");
 const config = require("../config/config");
-const crypto = require("crypto");
-// const Payment = require("../models/paymentModel");
+// const crypto = require("crypto"); // TODO: For future use in webhooks & payment verification
+const stripe = new Stripe(config.stripeSecretKey);
 
 const createOrder = async (req, res, next) => {
-  const razorpay = new Razorpay({
-    key_id: config.razorpayKeyId,
-    key_secret: config.razorpaySecretKey,
-  });
-
   try {
     const { amount } = req.body;
-    const options = {
-      amount: Math.round(amount * 100), // Amount in cents (1 USD = 100 cents)
-      currency: "USD", // USD for Razorpay US account
-      receipt: `receipt_${Date.now()}`,
-    };
 
-    const order = await razorpay.orders.create(options);
-    res.status(200).json({ success: true, order });
+    // Create a PaymentIntent with Stripe
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // Amount in cents
+      currency: "usd",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      metadata: {
+        integration: "POS System",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id,
+    });
+
+    // old code we make res like 
+    // this res.status(200).json({ success: true, order });
+    // why we use data in Bill if we sent clientSecret, paymentIntentId
+ 
   } catch (error) {
     console.log(error);
     next(error);
@@ -26,17 +36,15 @@ const createOrder = async (req, res, next) => {
 };
 
 
+// TODO: Stripe payment verification (if needed in the future)
 // const verifyPayment = async (req, res, next) => {
 //   try {
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-//       req.body;
-
-//     const expectedSignature = crypto
-//       .createHmac("sha256", config.razorpaySecretKey)
-//       .update(razorpay_order_id + "|" + razorpay_payment_id)
-//       .digest("hex");
-
-//     if (expectedSignature === razorpay_signature) {
+//     const { stripe_payment_intent_id } = req.body;
+//     
+//     // Retrieve the PaymentIntent from Stripe to verify
+//     const paymentIntent = await stripe.paymentIntents.retrieve(stripe_payment_intent_id);
+//     
+//     if (paymentIntent.status === 'succeeded') {
 //       res.json({ success: true, message: "Payment verified successfully!" });
 //     } else {
 //       const error = createHttpError(400, "Payment verification failed!");
@@ -47,52 +55,54 @@ const createOrder = async (req, res, next) => {
 //   }
 // };
 
+// TODO: Stripe webhook verification (for production use)
 // const webHookVerification = async (req, res, next) => {
 //   try {
-//     const secret = config.razorpyWebhookSecret;
-//     const signature = req.headers["x-razorpay-signature"];
-
-//     const body = JSON.stringify(req.body);
-
-//     // 🛑 Verify the signature
-//     const expectedSignature = crypto
-//       .createHmac("sha256", secret)
-//       .update(body)
-//       .digest("hex");
-
-//     if (expectedSignature === signature) {
-//       console.log("✅ Webhook verified:", req.body);
-
-//       // ✅ Process payment (e.g., update DB, send confirmation email)
-//       if (req.body.event === "payment.captured") {
-//         const payment = req.body.payload.payment.entity;
-//         console.log(`💰 Payment Captured: ${payment.amount / 100} INR`);
-
-//         // Add Payment Details in Database
-//         const newPayment = new Payment({
-//           paymentId: payment.id,
-//           orderId: payment.order_id,
-//           amount: payment.amount / 100,
-//           currency: payment.currency,
-//           status: payment.status,
-//           method: payment.method,
-//           email: payment.email,
-//           contact: payment.contact,
-//           createdAt: new Date(payment.created_at * 1000) 
-//         })
-
-//         await newPayment.save();
-//       }
-
-//       res.json({ success: true });
-//     } else {
-//       const error = createHttpError(400, "❌ Invalid Signature!");
-//       return next(error);
+//     const sig = req.headers['stripe-signature'];
+//     const webhookSecret = config.stripeWebhookSecret;
+//     
+//     let event;
+//     
+//     try {
+//       event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+//     } catch (err) {
+//       console.log(`⚠️  Webhook signature verification failed.`, err.message);
+//       return res.status(400).send(`Webhook Error: ${err.message}`);
 //     }
+//     
+//     // Handle the event
+//     switch (event.type) {
+//       case 'payment_intent.succeeded':
+//         const paymentIntent = event.data.object;
+//         console.log(`💰 PaymentIntent was successful: ${paymentIntent.id}`);
+//         
+//         // Add Payment Details to Database
+//         // const newPayment = new Payment({
+//         //   paymentId: paymentIntent.id,
+//         //   amount: paymentIntent.amount / 100,
+//         //   currency: paymentIntent.currency,
+//         //   status: paymentIntent.status,
+//         //   paymentMethod: paymentIntent.payment_method,
+//         //   createdAt: new Date(paymentIntent.created * 1000)
+//         // });
+//         //
+//         // await newPayment.save();
+//         break;
+//       
+//       case 'payment_intent.payment_failed':
+//         const failedPayment = event.data.object;
+//         console.log(`❌ Payment failed: ${failedPayment.id}`);
+//         break;
+//       
+//       default:
+//         console.log(`Unhandled event type ${event.type}`);
+//     }
+//     
+//     res.json({ received: true });
 //   } catch (error) {
 //     next(error);
 //   }
 // };
 
 
-module.exports = {createOrder}
+module.exports = { createOrder };

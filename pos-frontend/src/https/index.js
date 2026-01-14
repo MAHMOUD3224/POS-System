@@ -15,11 +15,11 @@ export const updateTable = ({ tableId, ...tableData }) =>
   axiosWrapper.put(`/api/table/${tableId}`, tableData);
 
 // Payment Endpoints
-export const createOrderRazorpay = (data) =>
-  axiosWrapper.post("/api/payment/create-order", data);
+export const createPaymentIntent = (data) => axiosWrapper.post("/api/payment/create-order", data);
 
-export const verifyPaymentRazorpay = (data) =>
-  axiosWrapper.post("/api/payment//verify-payment", data);
+// but we will not use this cuz stripe do the verification automatically
+// export const verifyPaymentRazorpay = (data) =>
+//   axiosWrapper.post("/api/payment/verify-payment", data);
 
 // Order Endpoints
 export const addOrder = (data) => axiosWrapper.post("/api/order/", data);
