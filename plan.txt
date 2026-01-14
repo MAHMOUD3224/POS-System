@@ -1,6 +1,9 @@
-[Todos] convert the backend type from CommonJS to ES Modules 
+[📋, ⚠️] convert the backend type from CommonJS to ES Modules 
     like this => require("mongoose") to import mongoose from "mongoose";
  
-[Todos] use TanStack Router if Better than React Router
+[📋] use TanStack Router if Better than React Router
 
-[Todos] use charts 📈 in dashboard 
+[📋] use charts 📈 in dashboard 
+
+[⚠️] cyprto library not need to install cuz it's a default in Node.js 
+if you need it install it later

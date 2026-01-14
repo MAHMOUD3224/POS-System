@@ -17,6 +17,7 @@ export const updateTable = ({ tableId, ...tableData }) =>
 // Payment Endpoints
 export const createOrderRazorpay = (data) =>
   axiosWrapper.post("/api/payment/create-order", data);
+
 export const verifyPaymentRazorpay = (data) =>
   axiosWrapper.post("/api/payment//verify-payment", data);
 

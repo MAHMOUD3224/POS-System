@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import { useMutation } from "@tanstack/react-query";
 import { addTable } from "../../https";
-import { enqueueSnackbar } from "notistack"
-import { playSound } from "../../utils";
+import { messageEnqueue} from "../../utils";
 
 const Modal = ({ setIsTableModalOpen }) => {
   const [tableData, setTableData] = useState({
@@ -32,15 +31,13 @@ const Modal = ({ setIsTableModalOpen }) => {
     onSuccess: (res) => {
         setIsTableModalOpen(false);
         const { data } = res;
-        playSound('success.mp3')
-        enqueueSnackbar(data.message, { variant: "success" })
+        messageEnqueue(data,'success')
         console.log(data);
     },
     onError: (error) => {
-        const { data } = error.response;
-        playSound('error.mp3');
-        enqueueSnackbar(data.message, { variant: "error" })
-        console.log(error);
+      const { data } = error.response;
+      messageEnqueue(data,'error')
+      console.log(error);
     }
   })
 

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// todos required not  requried
 const orderSchema = new mongoose.Schema({
     customerDetails: {
         name: { type: String, required: true },

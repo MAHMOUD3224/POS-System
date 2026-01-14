@@ -28,8 +28,8 @@ const MenuContainer = () => {
     if(itemCount === 0) return;
 
     const {name, price} = item;
+    // todos make sure the data is seconds not like that Mon Jan 05 2026 21:00:54 
     const newObj = { id: new Date(), name, pricePerQuantity: price, quantity: itemCount, price: price * itemCount };
-
     dispatch(addItems(newObj));
     setItemCount(0);
   }

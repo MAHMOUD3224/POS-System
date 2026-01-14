@@ -1,9 +1,9 @@
-import { orders } from "../../constants";
+// import { orders } from "../../constants";
 import { GrUpdate } from "react-icons/gr";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // todos: تحذير مهم: keepPreviousData مش حاجة تتستورد من المكتبة. هو خيار (option) بتمرره لـ useQuery، مش export.
 import { enqueueSnackbar } from "notistack";
 import { getOrders, updateOrderStatus } from "../../https/index";
-import { fetchDateTime } from "../../utils";
+import { fetchDateTime, messageEnqueue } from "../../utils";
 
 const RecentOrders = () => {
   const queryClient = useQueryClient();
@@ -15,11 +15,14 @@ const RecentOrders = () => {
   const orderStatusUpdateMutation = useMutation({
     mutationFn: ({orderId, orderStatus}) => updateOrderStatus({orderId, orderStatus}),
     onSuccess: (data) => {
-      enqueueSnackbar("Order status updated successfully!", { variant: "success" });
+      messageEnqueue({message:"Order status updated successfully!"},'success')
+      // enqueueSnackbar("Order status updated successfully!", { variant: "success" });
       queryClient.invalidateQueries(["orders"]); // Refresh order list
+      console.log(data.data.message)
     },
     onError: () => {
-      enqueueSnackbar("Failed to update order status!", { variant: "error" });
+      messageEnqueue({message:"Failed to update order status!"},'error')
+      // enqueueSnackbar("Failed to update order status!", { variant: "error" });
     }
   })
 

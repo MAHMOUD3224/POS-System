@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { getBgColor } from "../../utils";
+import { getAvatarName, getBgColor } from "../../utils";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { updateTable } from "../../redux/slices/customerSlice";
 import { useDispatch } from "react-redux";
 
-export default function TableCard({name, status, initials, seats}) {
+export default function TableCard({id,name, status, initials, seats}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
@@ -12,18 +12,18 @@ export default function TableCard({name, status, initials, seats}) {
     const handleClick = (name) => {
     if(status === "Booked") return;
     // todos: add table id
-    const table = { tableNo: name }
+    const table = { tableId: id, tableNo: name }
     dispatch(updateTable({table}))
     navigate(`/menu`);
   };
     return(
         <div onClick={() => handleClick(name)} className="w-[300px] bg-[#262626] hover:bg-[#1f1f1f] p-4 rounded-lg mb-4 cursor-pointer shadow-lg">
             <div className="flex items-center justify-between px-1 ">
-                <h1 className="text-[#f5f5f5] text-xl font-semibold">Table <FaLongArrowAltRight className="text-[#ababab] mx-1 inline" /> {name}</h1>
+                <h1 className="text-[#f5f5f5] text-xl font-semibold">Table <FaLongArrowAltRight className="text-[#ababab] mx-2 inline" /> {name}</h1>
                 <p className={` ${status === 'Booked' ? 'text-green-600 bg-[#068e3823]' : 'text-[#f6b100] bg-[#7a550723]'} px-2 py-1 rounded-lg`}>{status}</p>  
             </div>
             <div className="flex items-center justify-center my-5">
-                <h1 className={` ${getBgColor()} text-white rounded-full w-[60px] h-[60px] text-xl flex items-center justify-center`}>{initials}</h1>
+                <h1 className={`text-white rounded-full p-5 text-xl`} style={{backgroundColor : initials ? getBgColor() : "#1f1f1f"}} >{getAvatarName(initials) || "N/A"}</h1>
             </div>
             <p className="text-[#ababab]">Seats: <span className="text-[#f5f5f5]">{seats}</span></p>
         </div>

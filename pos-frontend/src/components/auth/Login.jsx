@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query"
 import { login } from "../../https/index"
-import { enqueueSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { messageEnqueue } from "../../utils";
  
 const Login = () => {
     const navigate = useNavigate();
@@ -29,13 +29,14 @@ const Login = () => {
       onSuccess: (res) => {
           const { data } = res;
           console.log(data);
+          messageEnqueue(data,'success')
           const { _id, name, email, phone, role } = data.data;
           dispatch(setUser({ _id, name, email, phone, role }));
           navigate("/");
       },
       onError: (error) => {
         const { response } = error;
-        enqueueSnackbar(response.data.message, { variant: "error" });
+        messageEnqueue(response.data,'error')
       }
     })
 
@@ -53,7 +54,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter employee email"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              className="flex-1 text-white bg-transparent focus:outline-none"
               required
             />
           </div>
@@ -69,7 +70,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className="bg-transparent flex-1 text-white focus:outline-none"
+              className="flex-1 text-white bg-transparent focus:outline-none"
               required
             />
           </div>
@@ -77,7 +78,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg mt-6 py-3 text-lg bg-yellow-400 text-gray-900 font-bold"
+          className="w-full py-3 mt-6 text-lg font-bold text-gray-900 bg-yellow-400 rounded-lg"
         >
           Sign in
         </button>

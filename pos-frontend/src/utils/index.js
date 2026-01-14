@@ -1,4 +1,5 @@
 import moment from "moment";
+import { enqueueSnackbar } from "notistack";
 
 export const getBgColor = () => {
   const bgarr = [
@@ -32,7 +33,18 @@ export const fetchDateTime = (newDate) => {
   return moment(newDate).format("lll"); // December 2, 2025 3:45 PM
 };
 
-export const playSound = (soundFile) => {
+
+export function messageEnqueue(data, status) {
+  const playSound = (soundFile) => {
   const audio = new Audio(`/sounds/${soundFile}`);
   audio.play();
-};
+  };
+
+  if (status == "success") {
+    playSound("success.mp3");
+    enqueueSnackbar(data.message, { variant: "success" });
+  } else {
+    playSound("error.mp3");
+    enqueueSnackbar(data.message, { variant: "error" });
+  }
+}
