@@ -7,6 +7,7 @@ import { getTotalPrice } from "../../redux/slices/cartSlice";
 import {
   // addOrder,
   createPaymentIntent,
+  verifyPayment,
   // updateTable,
 } from "../../https/index";
 import { enqueueSnackbar } from "notistack";
@@ -98,33 +99,41 @@ const Bill = () => {
           messageEnqueue({ message: "Payment Failed!" }, "error");
         } else if (paymentIntent.status === "succeeded") {
           console.log("Payment succeeded:", paymentIntent);
-          messageEnqueue({ message: "Payment Successful!" }, "success");
 
-          // Place the order after successful payment
-          // const orderData = {
-          //   customerDetails: {
-          //     name: customerData.customerName,
-          //     phone: customerData.customerPhone,
-          //     guests: customerData.guests,
-          //   },
-          //   orderStatus: "In Progress",
-          //   bills: {
-          //     total: total,
-          //     tax: tax,
-          //     totalWithTax: totalPriceWithTax,
-          //   },
-          //   items: cartData,
-          //   table: customerData.table.tableId,
-          //   paymentMethod: paymentMethod,
-          //   paymentData: {
-          //     stripe_payment_intent_id: paymentIntent.id,
-          //     stripe_payment_id: paymentIntent.id,
-          //   },
-          // };
+          // Verify payment on backend
+          try {
+            await verifyPayment({ stripe_payment_intent_id: paymentIntent.id });
+            messageEnqueue({ message: "Payment Verified & Successful!" }, "success");
 
-          // setTimeout(() => {
-          //   orderMutation.mutate(orderData);
-          // }, 1500);
+            // Place the order after successful payment
+            const orderData = {
+              customerDetails: {
+                name: customerData.customerName,
+                phone: customerData.customerPhone,
+                guests: customerData.guests,
+              },
+              orderStatus: "In Progress",
+              bills: {
+                total: total,
+                tax: tax,
+                totalWithTax: totalPriceWithTax,
+              },
+              items: cartData,
+              table: customerData.table.tableId,
+              paymentMethod: paymentMethod,
+              paymentData: {
+                stripe_payment_intent_id: paymentIntent.id,
+                stripe_payment_id: paymentIntent.id,
+              },
+            };
+
+            setTimeout(() => {
+              orderMutation.mutate(orderData);
+            }, 1500);
+          } catch (verifError) {
+            console.error("Verification error:", verifError);
+            messageEnqueue({ message: "Payment Verification Failed!" }, "error");
+          }
         }
       } catch (error) {
         console.log(error);
@@ -152,34 +161,34 @@ const Bill = () => {
     }
   };
 
-  // const orderMutation = useMutation({
-  //   mutationFn: (reqData) => addOrder(reqData),
-  //   onSuccess: (resData) => {
-  //     const { data } = resData.data;
-  //     console.log(data);
+  const orderMutation = useMutation({
+    mutationFn: (reqData) => addOrder(reqData),
+    onSuccess: (resData) => {
+      const { data } = resData.data;
+      console.log(data);
 
-  //     setOrderInfo(data);
+      // setOrderInfo(data);
 
-  //     // Update Table
-  //     const tableData = {
-  //       status: "Booked",
-  //       orderId: data._id,
-  //       tableId: data.table,
-  //     };
+      // Update Table
+      // const tableData = {
+      //   status: "Booked",
+      //   orderId: data._id,
+      //   tableId: data.table,
+      // };
 
-  //     setTimeout(() => {
-  //       tableUpdateMutation.mutate(tableData);
-  //     }, 1500);
-  //     messageEnqueue({message:"Order Placed!"}, "success")
-  //     // enqueueSnackbar("Order Placed!", {
-  //     //   variant: "success",
-  //     // });
-  //     setShowInvoice(true);
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //   },
-  // });
+      // setTimeout(() => {
+      //   tableUpdateMutation.mutate(tableData);
+      // }, 1500);
+      messageEnqueue({ message: "Order Placed!" }, "success")
+      // enqueueSnackbar("Order Placed!", {
+      //   variant: "success",
+      // });
+      // setShowInvoice(true);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   // const tableUpdateMutation = useMutation({
   //   mutationFn: (reqData) => updateTable(reqData),

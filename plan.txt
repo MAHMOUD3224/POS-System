@@ -1,16 +1,20 @@
-[📋, ⚠️] convert the backend type from CommonJS to ES Modules 
-    like this => require("mongoose") to import mongoose from "mongoose";
- 
-[📋] use TanStack Router if Better than React Router
+#Features
 
-[📋] use charts 📈 in dashboard 
+- إرجاع المبيعات والمشتريات (مرتجع)
+لا يكتمل نظام POS بدون "مرتجع". محاسبياً، لا يجوز حذف فاتورة بعد إصدارها (خاصة مع ZATCA)، بل يجب إصدار "إشعار دائن" (Credit Note) للمرتجع.
 
-[⚠️] cyprto library not need to install cuz it's a default in Node.js 
-if you need it install it later
-[⚠️⚠️‼️] we must hide .env from GitHub
-[⚠️⚠️‼️] we must change MongoDB Password to be secure
+- حماية النظام
+في Node.js، أنت تستخدم مكتبات مثل Sequelize أو Prisma أو تقوم بعمل Input Validation و Sanitization لضمان عدم اختراق قاعدة البيانات.
 
-our system flow
+- Offline Mode
+أن يعمل الكاشير حتى لو انقطع الإنترنت، ثم يرفع البيانات فور عودته (مهم جداً للمطاعم).
+
+- لوحة تحكم (Dashboard) للمالك
+تطبيق بسيط يرى فيه المبيعات لحظة بلحظة.
+
+----
+
+#our system flow
 1. user select items from menu
 2. user add items to cart
 3. user go to bill
@@ -42,3 +46,17 @@ our system flow
          │◀─────────────────────────────────────────────────────│
          │  { paymentIntent: { status: "succeeded" } }          │
          │                          │                          │
+
+--------------------------------------------------------------------------
+    
+[📋, ⚠️] convert the backend type from CommonJS to ES Modules 
+like this => require("mongoose") to import mongoose from "mongoose";
+ 
+[📋] use TanStack Router if Better than React Router
+
+[📋] use charts 📈 in dashboard 
+
+[⚠️] cyprto library not need to install cuz it's a default in Node.js 
+if you need it install it later
+[‼️] we must hide .env from GitHub
+[‼️] we must change MongoDB Password to be secure

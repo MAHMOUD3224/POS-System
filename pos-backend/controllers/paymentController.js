@@ -1,3 +1,4 @@
+const createHttpError = require("http-errors");
 const Stripe = require("stripe");
 const config = require("../config/config");
 // const crypto = require("crypto"); // TODO: For future use in webhooks & payment verification
@@ -28,7 +29,7 @@ const createOrder = async (req, res, next) => {
     // old code we make res like 
     // this res.status(200).json({ success: true, order });
     // why we use data in Bill if we sent clientSecret, paymentIntentId
- 
+
   } catch (error) {
     console.log(error);
     next(error);
@@ -36,24 +37,23 @@ const createOrder = async (req, res, next) => {
 };
 
 
-// TODO: Stripe payment verification (if needed in the future)
-// const verifyPayment = async (req, res, next) => {
-//   try {
-//     const { stripe_payment_intent_id } = req.body;
-//     
-//     // Retrieve the PaymentIntent from Stripe to verify
-//     const paymentIntent = await stripe.paymentIntents.retrieve(stripe_payment_intent_id);
-//     
-//     if (paymentIntent.status === 'succeeded') {
-//       res.json({ success: true, message: "Payment verified successfully!" });
-//     } else {
-//       const error = createHttpError(400, "Payment verification failed!");
-//       return next(error);
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const verifyPayment = async (req, res, next) => {
+  try {
+    const { stripe_payment_intent_id } = req.body;
+
+    // Retrieve the PaymentIntent from Stripe to verify
+    const paymentIntent = await stripe.paymentIntents.retrieve(stripe_payment_intent_id);
+
+    if (paymentIntent.status === 'succeeded') {
+      res.json({ success: true, message: "Payment verified successfully!" });
+    } else {
+      const error = createHttpError(400, "Payment verification failed!");
+      return next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 // TODO: Stripe webhook verification (for production use)
 // const webHookVerification = async (req, res, next) => {
@@ -105,4 +105,4 @@ const createOrder = async (req, res, next) => {
 // };
 
 
-module.exports = { createOrder };
+module.exports = { createOrder, verifyPayment };
