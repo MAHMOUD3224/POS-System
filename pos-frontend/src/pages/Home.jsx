@@ -8,7 +8,7 @@ import PopularDishes from "../components/home/PopularDishes";
 
 export default function Home() {
     return (
-        <section className="home-section bg-[var(--bg-base)] h-[calc(100vh-5rem)] overflow-y-auto custom-scrollbar flex flex-col lg:flex-row gap-8 p-6 transition-colors duration-300">
+        <section className="home-section vibrant-bg h-[calc(100vh-5rem)] overflow-y-auto custom-scrollbar flex flex-col lg:flex-row gap-8 p-6 transition-colors duration-300">
             {/* Left Div - Main Content Area */}
             <div className="flex-[3] flex flex-col gap-10 lg:px-6">
                 <Greetings />

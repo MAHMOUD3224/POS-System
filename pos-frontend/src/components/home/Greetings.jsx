@@ -14,22 +14,22 @@ export default function Greetings() {
     }, []);
 
     return (
-        <div className="flex items-center justify-between pb-4 border-b border-[#059669]">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
             <div className="flex flex-col gap-1">
-                <h1 className="text-[#059669] text-4xl font-black tracking-tighter leading-none">
-                    Good Morning, Mahmoud
+                <h1 className="text-[var(--text-primary)] text-4xl font-black tracking-tighter leading-none">
+                    Good Morning, <span className="text-[var(--color-primary)]">Mahmoud</span>
                 </h1>
-                <p className="text-[#059669] text-sm font-bold tracking-tight">
+                <p className="text-[var(--text-secondary)] text-sm font-bold tracking-tight">
                     Give your best services for customers 😀
                 </p>
             </div>
 
-            <div className="flex flex-col items-end gap-1.5 bg-[#059669] py-3 px-6 rounded-3xl border border-[var(--border-default)] shadow-sm">
-                <h2 className="text-[#059669] text-2xl font-black tracking-tight tabular-nums leading-none">
+            <div className="flex flex-col items-end gap-1.5 bg-[var(--bg-secondary)] py-3 px-6 rounded-3xl border border-[var(--border-default)] shadow-sm">
+                <h2 className="text-[var(--text-primary)] text-2xl font-black tracking-tight tabular-nums leading-none">
                     {time}
                 </h2>
-                <div className="bg-[#059669] px-3 py-1 rounded-full border border-[var(--border-subtle)]">
-                    <p className="text-[#059669] text-[10px] font-black uppercase tracking-[0.2em] leading-none">
+                <div className="bg-[var(--bg-card)] px-3 py-1 rounded-full border border-[var(--border-subtle)]">
+                    <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em] leading-none">
                         {date}
                     </p>
                 </div>

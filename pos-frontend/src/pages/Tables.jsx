@@ -9,9 +9,9 @@ import { messageEnqueue } from "../utils";
 const Tables = () => {
   const [status, setStatus] = useState("all");
 
-    useEffect(() => {
-      document.title = "POS | Tables"
-    }, [])
+  useEffect(() => {
+    document.title = "POS | Tables"
+  }, [])
 
   const { data: resData, isError } = useQuery({
     queryKey: ["tables"],
@@ -21,35 +21,33 @@ const Tables = () => {
     placeholderData: keepPreviousData,
   });
 
-  if(isError) {
-    messageEnqueue({message:'Something went wrong!'},'error')
+  if (isError) {
+    messageEnqueue({ message: 'Something went wrong!' }, 'error')
   }
 
   console.log(resData);
 
   return (
-    <section className="bg-[#1f1f1f]  h-[calc(100vh-5rem)] overflow-hidden">
+    <section className="vibrant-bg h-[calc(100vh-5rem)] overflow-hidden">
       <div className="flex items-center justify-between px-10 py-4">
         <div className="flex items-center gap-4">
           <BackButton />
-          <h1 className="text-[#f5f5f5] text-2xl font-bold tracking-wider">
+          <h1 className="text-[var(--text-primary)] text-2xl font-bold tracking-wider">
             Tables
           </h1>
         </div>
-        <div className="flex items-center justify-around gap-4">
+        <div className="flex items-center justify-around gap-4 bg-[var(--bg-card)] p-1.5 rounded-xl border border-[var(--border-default)]">
           <button
             onClick={() => setStatus("all")}
-            className={`text-[#ababab] text-lg ${
-              status === "all" && "bg-[#383838] rounded-lg px-5 py-2"
-            }  rounded-lg px-5 py-2 font-semibold`}
+            className={`text-[var(--text-muted)] text-lg transition-all duration-200 ${status === "all" && "bg-[var(--color-primary)] text-white shadow-md"
+              }  rounded-lg px-5 py-2 font-semibold hover:text-[var(--text-primary)]`}
           >
             All
           </button>
           <button
             onClick={() => setStatus("booked")}
-            className={`text-[#ababab] text-lg ${
-              status === "booked" && "bg-[#383838] rounded-lg px-5 py-2"
-            }  rounded-lg px-5 py-2 font-semibold`}
+            className={`text-[var(--text-muted)] text-lg transition-all duration-200 ${status === "booked" && "bg-[var(--color-primary)] text-white shadow-md"
+              }  rounded-lg px-5 py-2 font-semibold hover:text-[var(--text-primary)]`}
           >
             Booked
           </button>
@@ -70,7 +68,6 @@ const Tables = () => {
           );
         })}
       </div>
-
       <BottomNav />
     </section>
   );

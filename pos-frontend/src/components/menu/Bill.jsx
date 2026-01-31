@@ -152,36 +152,36 @@ const Bill = () => {
   return (
     <>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">
+        <p className="text-xs text-[var(--text-muted)] font-medium mt-2">
           Items({cartData.length})
         </p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">
+        <h1 className="text-[var(--text-primary)] text-md font-bold">
           ${total.toFixed(2)}
         </h1>
       </div>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">Tax(5.25%)</p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">${tax.toFixed(2)}</h1>
+        <p className="text-xs text-[var(--text-muted)] font-medium mt-2">Tax(5.25%)</p>
+        <h1 className="text-[var(--text-primary)] text-md font-bold">${tax.toFixed(2)}</h1>
       </div>
       <div className="flex items-center justify-between px-5 mt-2">
-        <p className="text-xs text-[#ababab] font-medium mt-2">
+        <p className="text-xs text-[var(--text-muted)] font-medium mt-2">
           Total With Tax
         </p>
-        <h1 className="text-[#f5f5f5] text-md font-bold">
+        <h1 className="text-[var(--text-primary)] text-md font-bold">
           ${totalPriceWithTax.toFixed(2)}
         </h1>
       </div>
       <div className="flex items-center gap-3 px-5 mt-4">
         <button
           onClick={() => setPaymentMethod("Cash")}
-          className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] font-semibold ${paymentMethod === "Cash" ? "bg-[#383737]" : ""
+          className={`bg-[var(--bg-secondary)] px-4 py-3 w-full rounded-lg text-[var(--text-secondary)] border border-[var(--border-default)] font-semibold ${paymentMethod === "Cash" ? "bg-[var(--bg-tertiary)] border-[var(--color-primary)]" : ""
             }`}
         >
           Cash
         </button>
         <button
           onClick={() => setPaymentMethod("Online")}
-          className={`bg-[#1f1f1f] px-4 py-3 w-full rounded-lg text-[#ababab] font-semibold ${paymentMethod === "Online" ? "bg-[#383737]" : ""
+          className={`bg-[var(--bg-secondary)] px-4 py-3 w-full rounded-lg text-[var(--text-secondary)] border border-[var(--border-default)] font-semibold ${paymentMethod === "Online" ? "bg-[var(--bg-tertiary)] border-[var(--color-primary)]" : ""
             }`}
         >
           Online

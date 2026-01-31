@@ -1,5 +1,6 @@
 import React from "react";
 import { itemsData, metricsData } from "../../constants";
+import { MdOutlineTimer } from "react-icons/md";
 
 const Metrics = () => {
   return (

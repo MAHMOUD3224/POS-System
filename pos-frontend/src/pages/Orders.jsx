@@ -23,8 +23,8 @@ export default function Orders() {
 
 
     return (
-        <section className="orders-section bg-[var(--bg-primary)] h-[calc(100vh-5rem)] overflow-hidden">
-            <div className="flex items-center justify-between px-10 py-4 border-b border-[var(--border-default)] bg-[var(--bg-card)] shadow-sm relative z-10">
+        <section className="orders-section vibrant-bg h-[calc(100vh-5rem)] overflow-hidden">
+            <div className="flex items-center justify-between px-10 py-4 border-b border-[var(--border-default)] bg-[var(--bg-card)] shadow-sm relative">
                 <div className="flex items-center gap-3">
                     <BackButton />
                     <h1 className="text-[var(--text-primary)] text-xl font-bold tracking-wide">Orders</h1>

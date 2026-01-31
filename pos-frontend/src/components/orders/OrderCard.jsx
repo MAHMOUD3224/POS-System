@@ -96,7 +96,7 @@ export default function OrderCard({ order }) {
           <span className="text-sm">{fetchDateTime(order.updatedAt)}</span>
           <button
             onClick={() => setShowModal(true)}
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            className="underline underline-offset-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
             {order.items.length} items total
           </button>

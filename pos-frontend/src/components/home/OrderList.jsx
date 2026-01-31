@@ -20,12 +20,12 @@ export default function OrderList({ order }) {
 
         <div className="flex flex-col items-end">
           {order.orderStatus === "Ready" ? (
-            <div className="flex items-center gap-1.5 text-[var(--color-success)] text-xs font-bold bg-[var(--color-success)]/10 px-3 py-1.5 rounded-lg">
-              <FaCheckDouble size={14} /> {order.orderStatus}
+            <div className="flex items-center gap-1.5 text-[var(--color-success)] text-md font-bold bg-[var(--color-success)]/10 px-3 py-1.5 rounded-lg">
+              <FaCheckDouble size={16} /> {order.orderStatus}
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 text-[var(--color-warning)] text-xs font-bold bg-[var(--color-warning)]/10 px-3 py-1.5 rounded-lg">
-              <MdOutlineTimer size={14} /> {order.orderStatus}
+            <div className="flex items-center gap-1.5 text-[var(--color-warning)] text-md font-bold bg-[var(--color-warning)]/10 px-3 py-1.5 rounded-lg">
+              <MdOutlineTimer size={16} /> {order.orderStatus}
             </div>
           )}
         </div>
