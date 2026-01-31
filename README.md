@@ -2,8 +2,6 @@
 
 > **A professional, full-stack Point of Sale solution built for speed, scalability, and seamless user experience.**
 
-![Project Banner](https://via.placeholder.com/1200x400?text=POS+System+Banner)
-
 ## 🚀 Overview
 
 This **POS System** is a state-of-the-art web application designed to streamline restaurant and retail operations. It bridges a robust Node.js backend with a dynamic React frontend to deliver real-time order processing, secure payments, and comprehensive table management.
@@ -104,7 +102,7 @@ npm run dev
 
 ## 👨💻 Author
 
-**Mahmoud**  
+**Mahmoud Rashad**  
 *Frontend Developer*  
 
 ---

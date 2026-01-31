@@ -40,7 +40,7 @@ const createOrder = async (req, res, next) => {
 const verifyPayment = async (req, res, next) => {
   try {
     const { stripe_payment_intent_id } = req.body;
-
+ 
     // Retrieve the PaymentIntent from Stripe to verify insted of using crypto.createHmac in razorpay
     const paymentIntent = await stripe.paymentIntents.retrieve(stripe_payment_intent_id);
 
