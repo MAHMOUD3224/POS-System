@@ -27,33 +27,32 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-[#1f1f1f] min-h-[calc(100vh-5rem)]">
-      <div className="container flex items-center justify-between px-6 mx-auto py-14 md:px-4">
-        <div className="flex items-center gap-3">
+    <div className="bg-[var(--bg-base)] min-h-[calc(100vh-5rem)] p-6 transition-colors duration-300">
+      <div className="container flex items-center justify-between mx-auto py-8 mb-6 border-b border-[var(--border-default)]">
+        <div className="flex items-center gap-4">
           {buttons.map(({ label, icon, action }) => {
             return (
               <button
                 key={label}
                 onClick={() => handleOpenModal(action)}
-                className="bg-[#1a1a1a] hover:bg-[#262626] px-8 py-3 rounded-lg text-[#f5f5f5] font-semibold text-md flex items-center gap-2"
+                className="bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] hover:border-[var(--color-primary)]/50 px-6 py-3 rounded-xl text-[var(--text-primary)] font-bold text-sm flex items-center gap-3 transition-all duration-300 shadow-sm"
               >
-                {label} {icon}
+                {label} <span className="text-[var(--color-primary)] text-lg">{icon}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="flex items-center gap-3">
-          {tabs.map((tab,index) => {
+        <div className="flex items-center p-1 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-default)]">
+          {tabs.map((tab, index) => {
             return (
               <button
-              key={index}
+                key={index}
                 className={`
-                px-8 py-3 rounded-lg text-[#f5f5f5] font-semibold text-md flex items-center gap-2 ${
-                  activeTab === tab
-                    ? "bg-[#262626]"
-                    : "bg-[#1a1a1a] hover:bg-[#262626]"
-                }`}
+                px-8 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === tab
+                    ? "bg-[var(--color-primary)] text-white shadow-lg"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab}
@@ -63,13 +62,15 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {activeTab === "Metrics" && <Metrics />}
-      <div className="px-3"> {activeTab === "Orders" && <RecentOrders />} </div>
-      {activeTab === "Payments" && 
-        <div className="container p-6 mx-auto text-white">
-          Payment Component Coming Soon
-        </div>
-      }
+      <div className="container mx-auto">
+        {activeTab === "Metrics" && <Metrics />}
+        {activeTab === "Orders" && <RecentOrders />}
+        {activeTab === "Payments" &&
+          <div className="p-12 text-center bg-[var(--bg-card)] rounded-3xl border border-[var(--border-default)] border-dashed">
+            <p className="text-[var(--text-muted)] text-xl font-medium">Payment Analytics Component Coming Soon</p>
+          </div>
+        }
+      </div>
 
       {isTableModalOpen && <Modal setIsTableModalOpen={setIsTableModalOpen} />}
     </div>

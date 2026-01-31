@@ -10,6 +10,7 @@ import Header from "./components/shared/Header";
 import { useSelector } from "react-redux";
 import useLoadData from "./hooks/useLoadData";
 import FullScreenLoader from "./components/shared/FullScreenLoader"
+import { ThemeProvider } from "./context/ThemeContext";
 
 function Layout() {
   const isLoading = useLoadData();
@@ -17,7 +18,7 @@ function Layout() {
   const hideHeaderRoutes = ["/auth"];
   const { isAuth } = useSelector(state => state.user);
 
-  if(isLoading) return <FullScreenLoader />
+  if (isLoading) return <FullScreenLoader />
 
   return (
     <>
@@ -81,9 +82,11 @@ function ProtectedRoutes({ children }) {
 
 function App() {
   return (
-    <Router>
-      <Layout />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Layout />
+      </Router>
+    </ThemeProvider>
   );
 }
 

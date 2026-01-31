@@ -11,84 +11,132 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false) ;
-  const [phone,setPhone] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [phone, setPhone] = useState('')
   const [guestCount, setGuestCount] = useState(0);
-  const [name,setName] = useState('')
-  const openModal = () => setIsModalOpen(true) ;
-  const closeModal = () => setIsModalOpen(false) ;
+  const [name, setName] = useState('')
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const increment = () => {
-  if(guestCount >= 6) return;
-  setGuestCount((prev) => prev + 1);
+    if (guestCount >= 6) return;
+    setGuestCount((prev) => prev + 1);
   }
   const decrement = () => {
-  if(guestCount <= 0) return;
-  setGuestCount((prev) => prev - 1);
-  }
-  
-  const isActive = (path) => location.pathname === path;
-  
-  const handleCreateOrder = () => {
-  // send the data to store
-  dispatch(setCustomer({name, phone, guests: guestCount}));
-  navigate("/tables");
+    if (guestCount <= 0) return;
+    setGuestCount((prev) => prev - 1);
   }
 
-  return(
-    <div className="fixed bottom-0 left-0 right-0 bg-[#262626] p-2 h-16 flex justify-around">
+  const isActive = (path) => location.pathname === path;
+
+  const handleCreateOrder = () => {
+    // send the data to store
+    dispatch(setCustomer({ name, phone, guests: guestCount }));
+    navigate("/tables");
+  }
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-[var(--bg-primary)] border-t border-[var(--border-default)] p-2 h-20 flex justify-around items-center shadow-[0_-4px_16px_rgba(5,150,105,0.06)] transition-colors duration-300">
       <button
-      onClick={() => navigate("/")}
-      className={`flex items-center justify-center font-bold 
-      ${isActive("/") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"}
-      w-[300px] rounded-[20px]`}>
-      <FaHome  className="inline mr-2" size={20}/>  <p>Home</p> </button>
-      
-      <button
-      onClick={() => navigate("/orders")}
-      className={`flex items-center justify-center font-bold 
-      ${isActive("/orders") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"}
-      w-[300px] rounded-[20px]`}><MdOutlineReorder  className="inline mr-2" size={20}/><p>Orders</p></button>
-      
-      <button
-      onClick={() => navigate("/tables")}
-      className={`flex items-center justify-center font-bold 
-      ${isActive("/tables") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"}
-      w-[300px] rounded-[20px]`}>
-      <MdTableBar className="inline mr-2" size={20}/><p>Tables</p></button>
-      
-      <button
-      onClick={() => navigate("/more")}
-      className={`flex items-center justify-center font-bold 
-      ${isActive("/more") ? "text-[#f5f5f5] bg-[#343434]" : "text-[#ababab]"}
-      w-[300px] rounded-[20px]`}>
-      <CiCircleMore className="inline mr-2" size={20}/><p>More</p></button>
-      <button disabled={isActive('/tables') || isActive('/menu')} onClick={openModal} className="ball absolute bottom-6 text-[#f5f5f5] rounded-full p-3"> <FaConciergeBell size={35}/> </button>
-      
-      <Modal isOpen={isModalOpen} onClose={closeModal} title={"Create Order"}>
-      <div>
-      <label className="block text-[#ababab] mb-2 text-sm font-medium">Customer Name</label>
-      <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
-        <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="" placeholder="Enter customer name" id="" className="flex-1 text-white bg-transparent focus:outline-none"  />
-      </div>
-      </div>
-      <div>
-        <label className="block text-[#ababab] mb-2 mt-3 text-sm font-medium">Customer Phone</label>
-        <div className="flex items-center rounded-lg p-3 px-4 bg-[#1f1f1f]">
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} type="number" name="" placeholder="+91-9999999999" id="" className="flex-1 text-white bg-transparent focus:outline-none"  />
-        </div>
-      </div>
-      <div>
-        <label className="block mb-2 mt-3 text-sm font-medium text-[#ababab]">Guest</label>
-        <div className="flex items-center justify-between bg-[#1f1f1f] px-4 py-3 rounded-lg">
-          <button onClick={decrement} className="text-2xl text-yellow-500">&minus;</button>
-          <span className="text-white">{guestCount} Person</span>
-          <button onClick={increment} className="text-2xl text-yellow-500">&#43;</button>
-        </div>
-      </div>
-      <button onClick={handleCreateOrder} className="w-full bg-[#F6B100] text-[#f5f5f5] rounded-lg py-3 mt-8 hover:bg-yellow-700">
-        Create Order
+        onClick={() => navigate("/")}
+        className={`flex flex-col items-center justify-center gap-1 font-semibold transition-all duration-200
+        ${isActive("/") ? "text-[var(--color-primary)] bg-[var(--color-primary)]/10" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"}
+        px-8 py-2 rounded-xl`}
+      >
+        <FaHome size={22} />
+        <span className="text-xs uppercase tracking-wider">Home</span>
       </button>
-          </Modal>
-      </div>
-    )
+
+      <button
+        onClick={() => navigate("/orders")}
+        className={`flex flex-col items-center justify-center gap-1 font-semibold transition-all duration-200
+        ${isActive("/orders") ? "text-[var(--color-primary)] bg-[var(--color-primary)]/10" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"}
+        px-8 py-2 rounded-xl`}
+      >
+        <MdOutlineReorder size={22} />
+        <span className="text-xs uppercase tracking-wider">Orders</span>
+      </button>
+
+      <button
+        onClick={() => navigate("/tables")}
+        className={`flex flex-col items-center justify-center gap-1 font-semibold transition-all duration-200
+        ${isActive("/tables") ? "text-[var(--color-primary)] bg-[var(--color-primary)]/10" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"}
+        px-8 py-2 rounded-xl`}
+      >
+        <MdTableBar size={22} />
+        <span className="text-xs uppercase tracking-wider">Tables</span>
+      </button>
+
+      <button
+        onClick={() => navigate("/more")}
+        className={`flex flex-col items-center justify-center gap-1 font-semibold transition-all duration-200
+        ${isActive("/more") ? "text-[var(--color-primary)] bg-[var(--color-primary)]/10" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"}
+        px-8 py-2 rounded-xl`}
+      >
+        <CiCircleMore size={22} />
+        <span className="text-xs uppercase tracking-wider">More</span>
+      </button>
+
+      <button
+        disabled={isActive('/tables') || isActive('/menu')}
+        onClick={openModal}
+        className="absolute -top-6 left-1/2 -translate-x-1/2 bg-gradient-to-tr from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-full p-4 shadow-xl shadow-[var(--color-primary)]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border border-white/20"
+      >
+        <FaConciergeBell size={30} />
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} title={"Create New Order"}>
+        <div className="space-y-5">
+          <div>
+            <label className="block text-[var(--text-secondary)] mb-2 text-sm font-semibold tracking-tight">Customer Name</label>
+            <div className="flex items-center rounded-xl p-3 px-4 bg-[var(--bg-secondary)] border border-[var(--border-default)] focus-within:border-[var(--color-primary)]/50 transition-all">
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Enter customer name"
+                className="flex-1 text-[var(--text-primary)] bg-transparent focus:outline-none placeholder:text-[var(--text-dim)]"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-[var(--text-secondary)] mb-2 text-sm font-semibold tracking-tight">Customer Phone</label>
+            <div className="flex items-center rounded-xl p-3 px-4 bg-[var(--bg-secondary)] border border-[var(--border-default)] focus-within:border-[var(--color-primary)]/50 transition-all">
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                type="tel"
+                placeholder="+1 234 567 890"
+                className="flex-1 text-[var(--text-primary)] bg-transparent focus:outline-none placeholder:text-[var(--text-dim)]"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-[var(--text-secondary)] tracking-tight">Number of Guests</label>
+            <div className="flex items-center justify-between bg-[var(--bg-secondary)] px-4 py-3 rounded-xl border border-[var(--border-default)]">
+              <button
+                onClick={decrement}
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all text-xl font-bold"
+              >
+                &minus;
+              </button>
+              <span className="text-[var(--text-primary)] font-bold text-lg">{guestCount} Guests</span>
+              <button
+                onClick={increment}
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all text-xl font-bold"
+              >
+                &#43;
+              </button>
+            </div>
+          </div>
+          <button
+            onClick={handleCreateOrder}
+            className="w-full bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary-dark)] to-[var(--color-primary-light)] text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-[var(--color-primary)]/20 transition-all mt-4 border border-white/10"
+          >
+            Create Order
+          </button>
+        </div>
+      </Modal>
+    </div>
+  );
 }
+
